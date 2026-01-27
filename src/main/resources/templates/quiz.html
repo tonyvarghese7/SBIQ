@@ -1,46 +1,70 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Session - Quiz App</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
 <body>
 
-<h2>Quiz</h2>
+    <div class="container">
+        <h2>Quiz Session</h2>
 
+        <!-- ✅ Show message if all attempted -->
+        <div th:if="${allAttempted}">
+            <h3>🎉 You have attempted all the questions! Great job!</h3>
+            <p>No more questions available at the moment.</p>
+            <a href="/" class="btn">Go Home</a>
+        </div>
 
-<!-- ✅ Show message if all attempted -->
-<div th:if="${allAttempted}">
-    <h3>You have attempted all the questions 🎉</h3>
-</div>
+        <!-- ✅ Show Error if any -->
+        <div th:if="${error}" class="error-message">
+            <strong th:text="${error}"></strong>
+        </div>
 
-<!-- ✅ Show quiz only if questions exist -->
-<form th:if="${!allAttempted}" method="post" action="/submit-quiz">
+        <!-- ✅ Show quiz only if questions exist -->
+        <form th:if="${!allAttempted}" method="post" action="/submit-quiz">
 
-<form method="post" action="/submit-quiz">
+            <div th:each="q, iterStat : ${questions}" class="question-card">
+                <span class="question-text">
+                    <b th:text="${iterStat.index + 1} + '.'"></b>
+                    <span th:text="${q.questionText}"></span>
+                </span>
 
-    <div th:each="q, iterStat : ${questions}">
-        <p>
-            <b th:text="${q.excelQuestionNo}"></b> :
-            <span th:text="${q.questionText}"></span>
-        </p>
+                <div class="options-grid">
+                    <!-- Option A -->
+                    <label class="option-label">
+                        <input type="radio" th:name="'answer' + ${iterStat.index + 1}" value="A" required />
+                        <span th:text="${q.option1}"></span>
+                    </label>
 
-        <input type="radio"
-               th:name="'answer' + ${iterStat.index + 1}"
-               value="A"
-               required /> A
+                    <!-- Option B -->
+                    <label class="option-label">
+                        <input type="radio" th:name="'answer' + ${iterStat.index + 1}" value="B" />
+                        <span th:text="${q.option2}"></span>
+                    </label>
 
-        <input type="radio"
-               th:name="'answer' + ${iterStat.index + 1}"
-               value="B" /> B
+                    <!-- Option C -->
+                    <label class="option-label">
+                        <input type="radio" th:name="'answer' + ${iterStat.index + 1}" value="C" />
+                        <span th:text="${q.option3}"></span>
+                    </label>
 
-        <input type="radio"
-               th:name="'answer' + ${iterStat.index + 1}"
-               value="C" /> C
+                    <!-- Option D -->
+                    <label class="option-label">
+                        <input type="radio" th:name="'answer' + ${iterStat.index + 1}" value="D" />
+                        <span th:text="${q.option4}"></span>
+                    </label>
+                </div>
+            </div>
 
-        <input type="radio"
-               th:name="'answer' + ${iterStat.index + 1}"
-               value="D" /> D
-
+            <button type="submit">Submit Quiz</button>
+        </form>
     </div>
 
-    <button type="submit">Submit</button>
-</form>
 </body>
+
 </html>
