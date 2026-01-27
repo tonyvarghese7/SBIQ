@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h2>Quiz</h2>
+
+
+<!-- ✅ Show message if all attempted -->
+<div th:if="${allAttempted}">
+    <h3>You have attempted all the questions 🎉</h3>
+</div>
+
+<!-- ✅ Show quiz only if questions exist -->
+<form th:if="${!allAttempted}" method="post" action="/submit-quiz">
+
+<form method="post" action="/submit-quiz">
+
+    <div th:each="q, iterStat : ${questions}">
+        <p>
+            <b th:text="${q.excelQuestionNo}"></b> :
+            <span th:text="${q.questionText}"></span>
+        </p>
+
+        <input type="radio"
+               th:name="'answer' + ${iterStat.index + 1}"
+               value="A"
+               required /> A
+
+        <input type="radio"
+               th:name="'answer' + ${iterStat.index + 1}"
+               value="B" /> B
+
+        <input type="radio"
+               th:name="'answer' + ${iterStat.index + 1}"
+               value="C" /> C
+
+        <input type="radio"
+               th:name="'answer' + ${iterStat.index + 1}"
+               value="D" /> D
+
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
