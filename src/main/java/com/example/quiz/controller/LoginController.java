@@ -40,6 +40,7 @@ public class LoginController {
         }
 
         // store user id in session for later use
+        session.removeAttribute("currentQuizQuestions");
         session.setAttribute("userId", user.getId());
 
         return "redirect:/quiz";

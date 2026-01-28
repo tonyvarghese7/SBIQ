@@ -28,46 +28,32 @@ public class QuizController {
     public String showQuiz(HttpSession session, Model model) {
 
         Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) return "redirect:/";
+        if (userId == null)
+            return "redirect:/";
 
-        // 1️⃣ Fetch fresh unattempted questions (limit 10)
-        List<Question> fresh = questionRepo.findFreshQuestionsForUser(userId);
+        // 1️⃣ Check if we have an ongoing quiz in session
+        List<Question> currentQuestions = (List<Question>) session.getAttribute("currentQuizQuestions");
 
-        // 2️⃣ If no questions left → show message
-        if (fresh.isEmpty()) {
-            model.addAttribute("allAttempted", true);
-            return "quiz";
-        }
+        if (currentQuestions == null) {
+            // 2️⃣ Fetch fresh unattempted questions (limit 10)
+            currentQuestions = questionRepo.findFreshQuestionsForUser(userId);
 
-        // 3️⃣ Create new quiz attempt ONLY if questions exist
-        UserQuiz uq = new UserQuiz();
-        uq.setUserId(userId);
-        uq = userQuizRepo.save(uq);
-
-        // 4️⃣ Assign question IDs
-        for (int i = 0; i < fresh.size(); i++) {
-            switch (i) {
-                case 0 -> uq.setQ1Id(fresh.get(i).getId());
-                case 1 -> uq.setQ2Id(fresh.get(i).getId());
-                case 2 -> uq.setQ3Id(fresh.get(i).getId());
-                case 3 -> uq.setQ4Id(fresh.get(i).getId());
-                case 4 -> uq.setQ5Id(fresh.get(i).getId());
-                case 5 -> uq.setQ6Id(fresh.get(i).getId());
-                case 6 -> uq.setQ7Id(fresh.get(i).getId());
-                case 7 -> uq.setQ8Id(fresh.get(i).getId());
-                case 8 -> uq.setQ9Id(fresh.get(i).getId());
-                case 9 -> uq.setQ10Id(fresh.get(i).getId());
+            // 3️⃣ If no questions left → show message
+            if (currentQuestions.isEmpty()) {
+                model.addAttribute("allAttempted", true);
+                return "quiz";
             }
+
+            // 4️⃣ Store in session (do NOT save to DB yet)
+            session.setAttribute("currentQuizQuestions", currentQuestions);
         }
 
-        userQuizRepo.save(uq);
-
-        model.addAttribute("questions", fresh);
+        model.addAttribute("questions", currentQuestions);
         model.addAttribute("allAttempted", false);
-        session.setAttribute("userQuizId", uq.getId());
 
         return "quiz";
     }
+
     @PostMapping("/submit-quiz")
     public String submitQuiz(
             @RequestParam(required = false) String answer1,
@@ -83,20 +69,42 @@ public class QuizController {
             HttpSession session,
             Model model) {
 
+        // Retrieve questions from session first
+        List<Question> questions = (List<Question>) session.getAttribute("currentQuizQuestions");
+
+        if (questions == null) {
+            return "redirect:/quiz";
+        }
+
         // 🔐 Validation
         if (Stream.of(answer1, answer2, answer3, answer4, answer5,
-                        answer6, answer7, answer8, answer9, answer10)
+                answer6, answer7, answer8, answer9, answer10)
                 .anyMatch(a -> a == null || a.isBlank())) {
 
             model.addAttribute("error", "Please answer all questions before submitting.");
+            model.addAttribute("questions", questions); // Add questions back to model
+            model.addAttribute("allAttempted", false);
             return "quiz"; // stay on quiz page
         }
 
-        Long quizAttemptId = (Long) session.getAttribute("userQuizId");
-        if (quizAttemptId == null) return "redirect:/";
+        UserQuiz uq = new UserQuiz();
+        uq.setUserId((Long) session.getAttribute("userId"));
 
-        UserQuiz uq = userQuizRepo.findById(quizAttemptId)
-                .orElseThrow(() -> new IllegalStateException("Quiz attempt not found"));
+        // Map IDs from questions list to UserQuiz fields
+        for (int i = 0; i < questions.size(); i++) {
+            switch (i) {
+                case 0 -> uq.setQ1Id(questions.get(i).getId());
+                case 1 -> uq.setQ2Id(questions.get(i).getId());
+                case 2 -> uq.setQ3Id(questions.get(i).getId());
+                case 3 -> uq.setQ4Id(questions.get(i).getId());
+                case 4 -> uq.setQ5Id(questions.get(i).getId());
+                case 5 -> uq.setQ6Id(questions.get(i).getId());
+                case 6 -> uq.setQ7Id(questions.get(i).getId());
+                case 7 -> uq.setQ8Id(questions.get(i).getId());
+                case 8 -> uq.setQ9Id(questions.get(i).getId());
+                case 9 -> uq.setQ10Id(questions.get(i).getId());
+            }
+        }
 
         uq.setAnswer1(answer1);
         uq.setAnswer2(answer2);
@@ -111,8 +119,10 @@ public class QuizController {
 
         userQuizRepo.save(uq);
 
+        // Clear session after successful submission
+        session.removeAttribute("currentQuizQuestions");
+
         return "quiz-submitted";
     }
-
 
 }
