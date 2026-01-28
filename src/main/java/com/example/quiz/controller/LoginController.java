@@ -19,14 +19,25 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String saveUser(@RequestParam String email, HttpSession session) {
+    public String loginOrRegister(@RequestParam String email, @RequestParam String password, HttpSession session,
+            org.springframework.ui.Model model) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    User u = new User();
-                    u.setEmail(email);
-                    return userRepository.save(u);
-                });
+        java.util.Optional<User> existingUser = userRepository.findByEmail(email);
+
+        User user;
+        if (existingUser.isPresent()) {
+            user = existingUser.get();
+            // Simple string comparison for now (in production use BCrypt)
+            if (!user.getPassword().equals(password)) {
+                model.addAttribute("error", "Invalid password for existing email.");
+                return "login";
+            }
+        } else {
+            user = new User();
+            user.setEmail(email);
+            user.setPassword(password);
+            userRepository.save(user);
+        }
 
         // store user id in session for later use
         session.setAttribute("userId", user.getId());

@@ -1,4 +1,5 @@
 package com.example.quiz.entity;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -22,5 +23,16 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Column(nullable = false)
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

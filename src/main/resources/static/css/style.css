@@ -1,60 +1,73 @@
 /* Global Styles */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
 :root {
-    --primary-color: #6a11cb;
-    --secondary-color: #2575fc;
+    --bg-color: #0f0518;
+    --card-bg: rgba(30, 20, 50, 0.7);
+    --primary-gradient: linear-gradient(135deg, #ff0055 0%, #7e22ce 100%);
+    --hover-gradient: linear-gradient(135deg, #ff2d75 0%, #9030e0 100%);
     --text-color: #ffffff;
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    --text-secondary: #9ca3af;
+    --input-bg: rgba(0, 0, 0, 0.3);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    --success-color: #10b981;
+    --error-color: #ef4444;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    background-size: 200% 200%;
-    animation: gradientBG 15s ease infinite;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(126, 34, 206, 0.3) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(255, 0, 85, 0.2) 0%, transparent 40%);
     color: var(--text-color);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-}
-
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    overflow-x: hidden;
 }
 
 /* Glassmorphism Card */
 .container {
-    background: var(--glass-bg);
+    background: var(--card-bg);
     box-shadow: var(--glass-shadow);
-    backdrop-filter: blur(8.5px);
-    -webkit-backdrop-filter: blur(8.5px);
-    border-radius: 20px;
-    border: 1px solid var(--glass-border);
-    padding: 40px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid var(--border-color);
+    padding: 50px;
     width: 90%;
-    max-width: 600px;
+    max-width: 480px;
     text-align: center;
-    margin: 20px;
+    position: relative;
+    overflow: hidden;
 }
 
+/* Header Styles */
 h2 {
-    font-weight: 600;
-    margin-bottom: 20px;
-    letter-spacing: 1px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    background: linear-gradient(to right, #fff, #cecece);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
 }
 
 h3 {
+    font-size: 1rem;
     font-weight: 400;
-    margin-bottom: 30px;
+    color: var(--text-secondary);
+    margin: 0 0 40px 0;
 }
 
 /* Forms */
@@ -63,73 +76,138 @@ form {
     flex-direction: column;
     gap: 20px;
     width: 100%;
-}
-
-input[type="email"], input[type="text"] {
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid var(--glass-border);
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 16px;
-    transition: all 0.3s ease;
-}
-
-input[type="email"]:focus, input[type="text"]:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
-input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-/* Buttons */
-button, .btn {
-    padding: 15px 30px;
-    border-radius: 50px;
-    border: none;
-    background: linear-gradient(90deg, #ff8a00, #e52e71);
-    color: white;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-decoration: none;
-    display: inline-block;
-}
-
-button:hover, .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-button:active, .btn:active {
-    transform: translateY(-1px);
-}
-
-/* Quiz Specific */
-.question-card {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 20px;
     text-align: left;
 }
 
+label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: -10px;
+    margin-left: 5px;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--input-bg);
+    color: white;
+    font-size: 16px;
+    width: 100%;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+input:focus {
+    outline: none;
+    border-color: #7e22ce;
+    box-shadow: 0 0 0 4px rgba(126, 34, 206, 0.2);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Password Validation */
+.password-criteria {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: -10px;
+    border: 1px solid var(--border-color);
+}
+
+.criteria-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.criteria-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s;
+}
+
+.criteria-item.valid {
+    color: var(--success-color);
+}
+
+.criteria-item i {
+    font-size: 10px;
+    /* dot size */
+}
+
+/* Buttons */
+button,
+.btn {
+    padding: 18px;
+    border-radius: 12px;
+    border: none;
+    background: var(--primary-gradient);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+    text-transform: none;
+    /* Salesbox is cleaner */
+}
+
+button:hover,
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 0, 85, 0.4);
+    background: var(--hover-gradient);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Error/Success Messages */
+.error-msg {
+    color: var(--error-color);
+    background: rgba(239, 68, 68, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-align: center;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Quiz Specific (keeping existing structure but updating colors) */
+.question-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 25px;
+    border: 1px solid var(--border-color);
+}
+
 .question-text {
-    font-size: 1.1em;
-    margin-bottom: 15px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
     display: block;
+    color: var(--text-color);
 }
 
 .options-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Single column for better readability on mobile, or 1fr 1fr for desktop */
-    gap: 10px;
+    grid-template-columns: 1fr;
+    gap: 15px;
 }
 
 @media (min-width: 600px) {
@@ -139,36 +217,39 @@ button:active, .btn:active {
 }
 
 .option-label {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
+    gap: 10px;
 }
 
 .option-label:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 input[type="radio"] {
-    margin-right: 10px;
-    accent-color: #e52e71;
+    accent-color: #ff0055;
     width: 20px;
     height: 20px;
+    margin: 0;
 }
 
-.success-icon {
-    font-size: 50px;
+/* Error Message Alias */
+.error-message,
+.error-msg {
+    color: var(--error-color);
+    background: rgba(239, 68, 68, 0.1);
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    text-align: center;
+    border: 1px solid rgba(239, 68, 68, 0.2);
     margin-bottom: 20px;
-}
-
-.error-message {
-    background: rgba(255, 0, 0, 0.2);
-    color: #ffcccc;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    border: 1px solid rgba(255, 0, 0, 0.3);
+    display: block;
 }
