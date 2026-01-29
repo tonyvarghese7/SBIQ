@@ -35,7 +35,7 @@ public class QuizController {
         List<Question> currentQuestions = (List<Question>) session.getAttribute("currentQuizQuestions");
 
         if (currentQuestions == null) {
-            // 2️⃣ Fetch fresh unattempted questions (limit 10)
+            // 2️⃣ Fetch fresh unattempted questions (limit 30)
             currentQuestions = questionRepo.findFreshQuestionsForUser(userId);
 
             // 3️⃣ If no questions left → show message
@@ -66,6 +66,26 @@ public class QuizController {
             @RequestParam(required = false) String answer8,
             @RequestParam(required = false) String answer9,
             @RequestParam(required = false) String answer10,
+            @RequestParam(required = false) String answer11,
+            @RequestParam(required = false) String answer12,
+            @RequestParam(required = false) String answer13,
+            @RequestParam(required = false) String answer14,
+            @RequestParam(required = false) String answer15,
+            @RequestParam(required = false) String answer16,
+            @RequestParam(required = false) String answer17,
+            @RequestParam(required = false) String answer18,
+            @RequestParam(required = false) String answer19,
+            @RequestParam(required = false) String answer20,
+            @RequestParam(required = false) String answer21,
+            @RequestParam(required = false) String answer22,
+            @RequestParam(required = false) String answer23,
+            @RequestParam(required = false) String answer24,
+            @RequestParam(required = false) String answer25,
+            @RequestParam(required = false) String answer26,
+            @RequestParam(required = false) String answer27,
+            @RequestParam(required = false) String answer28,
+            @RequestParam(required = false) String answer29,
+            @RequestParam(required = false) String answer30,
             HttpSession session,
             Model model) {
 
@@ -78,7 +98,11 @@ public class QuizController {
 
         // 🔐 Validation
         if (Stream.of(answer1, answer2, answer3, answer4, answer5,
-                answer6, answer7, answer8, answer9, answer10)
+                answer6, answer7, answer8, answer9, answer10,
+                answer11, answer12, answer13, answer14, answer15,
+                answer16, answer17, answer18, answer19, answer20,
+                answer21, answer22, answer23, answer24, answer25,
+                answer26, answer27, answer28, answer29, answer30)
                 .anyMatch(a -> a == null || a.isBlank())) {
 
             model.addAttribute("error", "Please answer all questions before submitting.");
@@ -103,6 +127,26 @@ public class QuizController {
                 case 7 -> uq.setQ8Id(questions.get(i).getId());
                 case 8 -> uq.setQ9Id(questions.get(i).getId());
                 case 9 -> uq.setQ10Id(questions.get(i).getId());
+                case 10 -> uq.setQ11Id(questions.get(i).getId());
+                case 11 -> uq.setQ12Id(questions.get(i).getId());
+                case 12 -> uq.setQ13Id(questions.get(i).getId());
+                case 13 -> uq.setQ14Id(questions.get(i).getId());
+                case 14 -> uq.setQ15Id(questions.get(i).getId());
+                case 15 -> uq.setQ16Id(questions.get(i).getId());
+                case 16 -> uq.setQ17Id(questions.get(i).getId());
+                case 17 -> uq.setQ18Id(questions.get(i).getId());
+                case 18 -> uq.setQ19Id(questions.get(i).getId());
+                case 19 -> uq.setQ20Id(questions.get(i).getId());
+                case 20 -> uq.setQ21Id(questions.get(i).getId());
+                case 21 -> uq.setQ22Id(questions.get(i).getId());
+                case 22 -> uq.setQ23Id(questions.get(i).getId());
+                case 23 -> uq.setQ24Id(questions.get(i).getId());
+                case 24 -> uq.setQ25Id(questions.get(i).getId());
+                case 25 -> uq.setQ26Id(questions.get(i).getId());
+                case 26 -> uq.setQ27Id(questions.get(i).getId());
+                case 27 -> uq.setQ28Id(questions.get(i).getId());
+                case 28 -> uq.setQ29Id(questions.get(i).getId());
+                case 29 -> uq.setQ30Id(questions.get(i).getId());
             }
         }
 
@@ -116,6 +160,26 @@ public class QuizController {
         uq.setAnswer8(answer8);
         uq.setAnswer9(answer9);
         uq.setAnswer10(answer10);
+        uq.setAnswer11(answer11);
+        uq.setAnswer12(answer12);
+        uq.setAnswer13(answer13);
+        uq.setAnswer14(answer14);
+        uq.setAnswer15(answer15);
+        uq.setAnswer16(answer16);
+        uq.setAnswer17(answer17);
+        uq.setAnswer18(answer18);
+        uq.setAnswer19(answer19);
+        uq.setAnswer20(answer20);
+        uq.setAnswer21(answer21);
+        uq.setAnswer22(answer22);
+        uq.setAnswer23(answer23);
+        uq.setAnswer24(answer24);
+        uq.setAnswer25(answer25);
+        uq.setAnswer26(answer26);
+        uq.setAnswer27(answer27);
+        uq.setAnswer28(answer28);
+        uq.setAnswer29(answer29);
+        uq.setAnswer30(answer30);
 
         userQuizRepo.save(uq);
 
