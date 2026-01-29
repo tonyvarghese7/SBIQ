@@ -1,5 +1,6 @@
 package com.example.quiz.controller;
 
+import com.example.quiz.dto.QuizResultDTO;
 import com.example.quiz.entity.Question;
 import com.example.quiz.entity.UserQuiz;
 import com.example.quiz.repository.QuestionRepository;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -97,7 +100,7 @@ public class QuizController {
         }
 
         // 🔐 Validation
-        if (Stream.of(answer1, answer2, answer3, answer4, answer5,
+        /*if (Stream.of(answer1, answer2, answer3, answer4, answer5,
                 answer6, answer7, answer8, answer9, answer10,
                 answer11, answer12, answer13, answer14, answer15,
                 answer16, answer17, answer18, answer19, answer20,
@@ -109,7 +112,24 @@ public class QuizController {
             model.addAttribute("questions", questions); // Add questions back to model
             model.addAttribute("allAttempted", false);
             return "quiz"; // stay on quiz page
-        }
+        }*/
+
+        String [] answers={answer1, answer2, answer3, answer4, answer5,
+                answer6, answer7, answer8, answer9, answer10,
+                answer11, answer12, answer13, answer14, answer15,
+                answer16, answer17, answer18, answer19, answer20,
+                answer21, answer22, answer23, answer24, answer25,
+                answer26, answer27, answer28, answer29, answer30
+        };
+
+        for (int i=0 ;i<questions.size();i++)
+            if(answers[i]==null||answers[i].isBlank()){
+                model.addAttribute("error", "Please answer all questions before submitting.");
+                model.addAttribute("questions", questions); // Add questions back to model
+                model.addAttribute("allAttempted", false);
+                return "quiz"; // stay on quiz page
+
+            }
 
         UserQuiz uq = new UserQuiz();
         uq.setUserId((Long) session.getAttribute("userId"));
@@ -183,10 +203,34 @@ public class QuizController {
 
         userQuizRepo.save(uq);
 
-        // Clear session after successful submission
+        // build result view
+        List<QuizResultDTO> results = new ArrayList<>();
+
+        for (int i = 0; i < questions.size(); i++) {
+            Question q = questionRepo.findById(questions.get(i).getId()).orElseThrow();
+
+            Map<String, String> options = new java.util.LinkedHashMap<>();
+            options.put("A", q.getOption1());
+            options.put("B", q.getOption2());
+            options.put("C", q.getOption3());
+            options.put("D", q.getOption4());
+
+            results.add(new QuizResultDTO(
+                    q.getQuestionText(),
+                    q.getCorrectOption(),   // from DB
+                    answers[i],             // user selection
+                    options
+            ));
+
+
+        }
+
+// Clear session after successful submission
         session.removeAttribute("currentQuizQuestions");
+        model.addAttribute("results", results);
 
         return "quiz-submitted";
+
     }
 
 }

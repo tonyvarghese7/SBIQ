@@ -21,6 +21,8 @@ public class Question {
     private String option3;
     private String option4;
 
+    @Column(name = "correct_option")
+    private String correctOption; // A / B / C / D
     // ===== Getters & Setters =====
 
     public Long getId() {
@@ -74,4 +76,10 @@ public class Question {
     public void setOption4(String option4) {
         this.option4 = option4;
     }
+
+
+    public String getCorrectOption() {
+        return correctOption;
+    }
+
 }

@@ -4,20 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submitted - Quiz App</title>
+    <title>Quiz Result - Quiz App</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
 
     <div class="container">
-        <div class="success-icon">🎉</div>
-        <h2>Quiz Submitted Successfully!</h2>
-        <p>Thank you for completing the quiz.</p>
 
-        <div style="margin-top: 30px;">
-            <a href="/" class="btn">Go to Home</a>
+        <h2>Quiz Result</h2>
+
+        <div th:each="res, stat : ${results}" class="question-card">
+
+            <!-- Question -->
+            <div class="question-text">
+                <span th:text="${stat.index + 1} + '.'"></span>
+                <span th:text="${res.question}"></span>
+            </div>
+
+            <!-- Options -->
+            <div th:each="opt : ${res.options.entrySet()}">
+
+                <div class="option" th:classappend="
+                    ${opt.key == res.correctOption} ? ' correct' :
+                    (${opt.key == res.userOption} ? ' wrong' : '')">
+
+                    <b th:text="${opt.key} + '.'"></b>
+                    <span th:text="${opt.value}" style="margin-left: 5px;"></span>
+                </div>
+
+            </div>
+
+            <!-- Result -->
+            <div class="result-text">
+                <div th:if="${res.userOption == res.correctOption}" class="correct-text">
+                    ✔ Correct Answer
+                </div>
+
+                <div th:if="${res.userOption != res.correctOption}" class="wrong-text">
+                    ✖ Wrong Answer |
+                    <span style="color: var(--text-secondary); margin-left: 5px; font-weight: normal;">Correct: </span>
+                    <b th:text="${res.correctOption}" style="margin-left: 5px;"></b>
+                </div>
+            </div>
+
         </div>
+
+
     </div>
 
 </body>
