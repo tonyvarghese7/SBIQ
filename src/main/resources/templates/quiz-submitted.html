@@ -10,8 +10,8 @@
 
 <body>
 
-    <div class="container--quiz">
-
+    <div class="container container--quiz">
+        <img th:src="@{/images/logo.png}" alt="Salesbox AI" class="logo">
         <h2>Quiz Result</h2>
 
         <div th:each="res, stat : ${results}" class="question-card">
@@ -23,16 +23,13 @@
             </div>
 
             <!-- Options -->
-            <div th:each="opt : ${res.options.entrySet()}">
-
-                <div class="option" th:classappend="
-                    ${opt.key == res.correctOption} ? ' correct' :
-                    (${opt.key == res.userOption} ? ' wrong' : '')">
+            <div class="options-grid">
+                <div th:each="opt : ${res.options.entrySet()}" class="option"
+                    th:classappend="${opt.key == res.correctOption} ? ' correct' : (${opt.key == res.userOption} ? ' wrong' : '')">
 
                     <b th:text="${opt.key} + '.'"></b>
-                    <span th:text="${opt.value}" style="margin-left: 5px;"></span>
+                    <span th:text="${opt.value}"></span>
                 </div>
-
             </div>
 
             <!-- Result -->
@@ -42,9 +39,10 @@
                 </div>
 
                 <div th:if="${res.userOption != res.correctOption}" class="wrong-text">
-                    ✖ Wrong Answer |
-                    <span style="color: var(--text-secondary); margin-left: 5px; font-weight: normal;">Correct: </span>
-                    <b th:text="${res.correctOption}" style="margin-left: 5px;"></b>
+                    ✖ Wrong Answer
+                    <span style="color: var(--text-muted); margin: 0 10px; font-weight: 300;">|</span>
+                    <span style="color: var(--text-muted); font-weight: normal;">Correct: </span>
+                    <b th:text="${res.correctOption}" style="color: var(--success-color); margin-left: 5px;"></b>
                 </div>
             </div>
 
