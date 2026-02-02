@@ -100,21 +100,24 @@ public class QuizController {
         }
 
         // 🔐 Validation
-        /*if (Stream.of(answer1, answer2, answer3, answer4, answer5,
-                answer6, answer7, answer8, answer9, answer10,
-                answer11, answer12, answer13, answer14, answer15,
-                answer16, answer17, answer18, answer19, answer20,
-                answer21, answer22, answer23, answer24, answer25,
-                answer26, answer27, answer28, answer29, answer30)
-                .anyMatch(a -> a == null || a.isBlank())) {
+        /*
+         * if (Stream.of(answer1, answer2, answer3, answer4, answer5,
+         * answer6, answer7, answer8, answer9, answer10,
+         * answer11, answer12, answer13, answer14, answer15,
+         * answer16, answer17, answer18, answer19, answer20,
+         * answer21, answer22, answer23, answer24, answer25,
+         * answer26, answer27, answer28, answer29, answer30)
+         * .anyMatch(a -> a == null || a.isBlank())) {
+         * 
+         * model.addAttribute("error",
+         * "Please answer all questions before submitting.");
+         * model.addAttribute("questions", questions); // Add questions back to model
+         * model.addAttribute("allAttempted", false);
+         * return "quiz"; // stay on quiz page
+         * }
+         */
 
-            model.addAttribute("error", "Please answer all questions before submitting.");
-            model.addAttribute("questions", questions); // Add questions back to model
-            model.addAttribute("allAttempted", false);
-            return "quiz"; // stay on quiz page
-        }*/
-
-        String [] answers={answer1, answer2, answer3, answer4, answer5,
+        String[] answers = { answer1, answer2, answer3, answer4, answer5,
                 answer6, answer7, answer8, answer9, answer10,
                 answer11, answer12, answer13, answer14, answer15,
                 answer16, answer17, answer18, answer19, answer20,
@@ -122,8 +125,8 @@ public class QuizController {
                 answer26, answer27, answer28, answer29, answer30
         };
 
-        for (int i=0 ;i<questions.size();i++)
-            if(answers[i]==null||answers[i].isBlank()){
+        for (int i = 0; i < questions.size(); i++)
+            if (answers[i] == null || answers[i].isBlank()) {
                 model.addAttribute("error", "Please answer all questions before submitting.");
                 model.addAttribute("questions", questions); // Add questions back to model
                 model.addAttribute("allAttempted", false);
@@ -217,17 +220,25 @@ public class QuizController {
 
             results.add(new QuizResultDTO(
                     q.getQuestionText(),
-                    q.getCorrectOption(),   // from DB
-                    answers[i],             // user selection
-                    options
-            ));
-
+                    q.getCorrectOption(), // from DB
+                    answers[i], // user selection
+                    options));
 
         }
 
-// Clear session after successful submission
+        // Calculate score
+        int score = 0;
+        for (QuizResultDTO res : results) {
+            if (res.getUserOption() != null && res.getUserOption().equals(res.getCorrectOption())) {
+                score++;
+            }
+        }
+
+        // Clear session after successful submission
         session.removeAttribute("currentQuizQuestions");
         model.addAttribute("results", results);
+        model.addAttribute("score", score);
+        model.addAttribute("totalQuestions", questions.size());
 
         return "quiz-submitted";
 

@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserQuizRepository extends JpaRepository<UserQuiz, Long> {
-    Optional<UserQuiz> findByUserId(Long userId);
+  Optional<UserQuiz> findByUserId(Long userId);
 
-
-    @Query(
-            value = """
+  @Query(value = """
         SELECT q1_id FROM user_quiz WHERE user_id = :userId
         UNION
         SELECT q2_id FROM user_quiz WHERE user_id = :userId
@@ -33,8 +31,6 @@ public interface UserQuizRepository extends JpaRepository<UserQuiz, Long> {
         SELECT q9_id FROM user_quiz WHERE user_id = :userId
         UNION
         SELECT q10_id FROM user_quiz WHERE user_id = :userId
-      """,
-            nativeQuery = true
-    )
-    List<Long> findQuestionIdsByUserId(@Param("userId") Long userId);
+      """, nativeQuery = true)
+  List<Long> findQuestionIdsByUserId(@Param("userId") Long userId);
 }

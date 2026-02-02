@@ -151,7 +151,6 @@ public class UserQuiz {
     private Long q30Id;
 
     // ===== Getters and Setters =====
-
     public Long getId() {
         return id;
     }
@@ -176,7 +175,6 @@ public class UserQuiz {
         this.createdAt = createdAt;
     }
 
-    // Answers
     public String getAnswer1() {
         return answer1;
     }
@@ -417,7 +415,6 @@ public class UserQuiz {
         this.answer30 = answer30;
     }
 
-    // Questions
     public Long getQ1Id() {
         return q1Id;
     }

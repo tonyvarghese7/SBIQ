@@ -10,8 +10,7 @@
 
     /* Backgrounds */
     --bg-dark: #1A0A2E;
-    --bg-card: rgba(45, 27, 78, 0.7);
-    /* #2D1B4E with opacity for glass */
+    --bg-card: #2D1B4E;
     --bg-muted: #3D2B5A;
 
     /* Text */
@@ -24,8 +23,8 @@
     --success-color: #10b981;
 
     /* Gradients */
-    --hero-gradient: linear-gradient(135deg, #1A0A2E 0%, #2D1B4E 100%);
-    --card-gradient: linear-gradient(180deg, rgba(45, 27, 78, 0.9) 0%, rgba(26, 10, 46, 0.9) 100%);
+    --hero-gradient: linear-gradient(135deg, hsl(270 60% 15%) 0%, hsl(290 50% 20%) 50%, hsl(270 50% 10%) 100%);
+    --card-gradient: linear-gradient(180deg, hsl(270 45% 15%) 0%, hsl(270 50% 10%) 100%);
     --accent-gradient: linear-gradient(90deg, #EC4899 0%, #DB2777 100%);
     --hover-gradient: linear-gradient(90deg, #F472B6 0%, #EC4899 100%);
     --glow-gradient: radial-gradient(circle at center, rgba(168, 85, 247, 0.4) 0%, transparent 70%);
@@ -72,15 +71,18 @@ body {
 
 .container--quiz {
     max-width: 900px;
+    margin-top: 100px;
+    margin-bottom: 50px;
 }
 
 /* Logo */
 .logo {
     width: 120px;
     height: auto;
-    margin-bottom: 40px;
-    /* Increased from 25px for clear space */
-    display: inline-block;
+    position: fixed;
+    top: 30px;
+    left: 40px;
+    z-index: 1000;
 }
 
 /* Typography */
@@ -165,6 +167,9 @@ input::placeholder {
 /* Buttons */
 button,
 .btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
     padding: 16px;
     border-radius: 12px;
     border: none;
@@ -202,6 +207,13 @@ button:active {
 }
 
 /* Quiz Specific */
+.quiz-icon {
+    width: 80px;
+    height: auto;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+}
+
 .question-card {
     background: rgba(255, 255, 255, 0.02);
     border-radius: 16px;
@@ -295,4 +307,34 @@ input[type="radio"] {
     border-radius: 16px;
     margin-bottom: 30px;
     border: 1px solid var(--border-color);
+}
+
+/* Score Badge */
+.score-badge {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
+    padding: 10px 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.score-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.score-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-magenta);
 }

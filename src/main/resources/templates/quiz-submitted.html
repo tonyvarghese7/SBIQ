@@ -9,9 +9,13 @@
 </head>
 
 <body>
-
+    <img th:src="@{/images/logo.png}" alt="Salesbox AI" class="logo">
+    <div class="score-badge">
+        <span class="score-label">Score</span>
+        <span class="score-value" th:text="${score} + '/' + ${totalQuestions}"></span>
+    </div>
     <div class="container container--quiz">
-        <img th:src="@{/images/logo.png}" alt="Salesbox AI" class="logo">
+        <img th:src="@{/images/quiz-icon.png}" alt="Quiz Icon" class="quiz-icon">
         <h2>Quiz Result</h2>
 
         <div th:each="res, stat : ${results}" class="question-card">
