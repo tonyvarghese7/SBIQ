@@ -13,15 +13,19 @@ public class Question {
     @Column(name = "excel_question_no")
     private int excelQuestionNo;
 
-    @Column(name = "question_text")
+    @Column(name = "question_text", length = 2048)
     private String questionText;
 
+    @Column(length = 2048)
     private String option1;
+    @Column(length = 2048)
     private String option2;
+    @Column(length = 2048)
     private String option3;
+    @Column(length = 2048)
     private String option4;
 
-    @Column(name = "correct_option")
+    @Column(name = "correct_option", length = 2048)
     private String correctOption; // A / B / C / D
     // ===== Getters & Setters =====
 
@@ -77,9 +81,12 @@ public class Question {
         this.option4 = option4;
     }
 
-
     public String getCorrectOption() {
         return correctOption;
+    }
+
+    public void setCorrectOption(String correctOption) {
+        this.correctOption = correctOption;
     }
 
 }
