@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -12,9 +13,29 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    // getters and setters
+    @Column(nullable = false)
+    private String password;
+
+    @Column(name = "score", nullable = false)
+    private Integer score = 0;
+
+    // Constructors
+    public User() {
+    }
+
+    public User(String email, String password, Integer score) {
+        this.email = email;
+        this.password = password;
+        this.score = score;
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -25,14 +46,19 @@ public class User {
         this.email = email;
     }
 
-    @Column(nullable = false)
-    private String password;
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 }
