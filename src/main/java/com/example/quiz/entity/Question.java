@@ -27,7 +27,19 @@ public class Question {
 
     @Column(name = "correct_option", length = 2048)
     private String correctOption; // A / B / C / D
+
+    @Column(name = "difficulty")
+    private String difficulty; // Easy / Medium / Hard
+
     // ===== Getters & Setters =====
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
 
     public Long getId() {
         return id;

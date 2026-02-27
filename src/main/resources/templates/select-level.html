@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Difficulty - Quiz App</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <img th:src="@{/images/logo.png}" alt="Salesbox AI" class="logo">
+    <div class="container">
+        <h2>Start Quiz</h2>
+        <h3>Choose your challenge level</h3>
+
+        <form method="post" action="/select-level">
+            <div class="options-grid" style="margin-bottom: 20px;">
+                <label class="option-label" style="justify-content: center; text-align: center;">
+                    <input type="radio" name="level" value="entry" required checked>
+                    <div>
+                        <strong style="display:block; font-size:1.1em;">Entry Level</strong>
+                        <span style="font-size:0.9em; opacity:0.8;">Basic & Intermediate</span>
+                    </div>
+                </label>
+                <label class="option-label" style="justify-content: center; text-align: center;">
+                    <input type="radio" name="level" value="advanced" required>
+                    <div>
+                        <strong style="display:block; font-size:1.1em;">Advanced Level</strong>
+                        <span style="font-size:0.9em; opacity:0.8;">Intermediate & Advanced</span>
+                    </div>
+                </label>
+            </div>
+
+            <button type="submit">Start Quiz</button>
+        </form>
+    </div>
+</body>
+
+</html>

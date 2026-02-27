@@ -43,7 +43,7 @@ public class LoginController {
         session.removeAttribute("currentQuizQuestions");
         session.setAttribute("userId", user.getId());
 
-        return "redirect:/quiz";
+        return "redirect:/select-level";
     }
 
     @GetMapping("/success")

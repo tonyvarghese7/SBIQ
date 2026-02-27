@@ -27,6 +27,28 @@ public class QuizController {
     @Autowired
     private com.example.quiz.repository.UserRepository userRepo;
 
+    // ===== Level Selection =====
+    @GetMapping("/select-level")
+    public String showSelectLevelPage(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null)
+            return "redirect:/";
+        return "select-level";
+    }
+
+    @PostMapping("/select-level")
+    public String handleSelectLevel(@RequestParam String level, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null)
+            return "redirect:/";
+
+        session.setAttribute("quizLevel", level);
+        // Clear any existing questions so we fetch new ones based on level
+        session.removeAttribute("currentQuizQuestions");
+
+        return "redirect:/quiz";
+    }
+
     // ===== Show quiz page =====
     @GetMapping("/quiz")
     public String showQuiz(HttpSession session, Model model) {
@@ -35,20 +57,39 @@ public class QuizController {
         if (userId == null)
             return "redirect:/";
 
+        // Check if level is selected
+        String level = (String) session.getAttribute("quizLevel");
+        if (level == null) {
+            return "redirect:/select-level";
+        }
+
         // 1️⃣ Check if we have an ongoing quiz in session
         List<Question> currentQuestions = (List<Question>) session.getAttribute("currentQuizQuestions");
 
         if (currentQuestions == null) {
-            // 2️⃣ Fetch fresh unattempted questions (limit 30)
-            currentQuestions = questionRepo.findFreshQuestionsForUser(userId);
+            // 2️⃣ Determine difficulties based on level
+            List<String> difficulties = new ArrayList<>();
+            if ("entry".equalsIgnoreCase(level)) {
+                difficulties.add("Easy");
+                difficulties.add("Medium");
+            } else if ("advanced".equalsIgnoreCase(level)) {
+                difficulties.add("Medium");
+                difficulties.add("Hard");
+            } else {
+                // Default fallback if something is weird
+                difficulties.add("Easy");
+            }
 
-            // 3️⃣ If no questions left → show message
+            // 3️⃣ Fetch fresh unattempted questions (limit 30)
+            currentQuestions = questionRepo.findFreshQuestionsForUserAndDifficulties(userId, difficulties);
+
+            // 4️⃣ If no questions left → show message
             if (currentQuestions.isEmpty()) {
                 model.addAttribute("allAttempted", true);
                 return "quiz";
             }
 
-            // 4️⃣ Store in session (do NOT save to DB yet)
+            // 5️⃣ Store in session (do NOT save to DB yet)
             session.setAttribute("currentQuizQuestions", currentQuestions);
         }
 
@@ -85,6 +126,9 @@ public class QuizController {
         int score = 0;
         List<QuizResultDTO> results = new ArrayList<>();
 
+        // Check if user has taken any quizzes before
+        boolean hasAttemptedBefore = !userQuizRepo.findQuestionIdsByUserId(userId).isEmpty();
+
         // Process each question
         for (int i = 0; i < questions.size(); i++) {
             Question q = questions.get(i);
@@ -117,13 +161,16 @@ public class QuizController {
 
         // 4. Update User Score in DB
         com.example.quiz.entity.User user = userRepo.findById(userId).orElseThrow();
-        user.setScore(user.getScore() + score);
+        int previousScore = user.getScore();
+        user.setScore(score); // Store the actual score obtained, not cumulative
         userRepo.save(user);
 
         // Clear session and show results
         session.removeAttribute("currentQuizQuestions");
         model.addAttribute("results", results);
         model.addAttribute("score", score);
+        model.addAttribute("previousScore", previousScore);
+        model.addAttribute("hasAttemptedBefore", hasAttemptedBefore);
         model.addAttribute("totalQuestions", questions.size());
 
         return "quiz-submitted";

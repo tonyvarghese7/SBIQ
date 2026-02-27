@@ -20,4 +20,18 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
             LIMIT 30
             """, nativeQuery = true)
     List<Question> findFreshQuestionsForUser(Long userId);
+
+    @Query(value = """
+            SELECT *
+            FROM questions
+            WHERE id NOT IN (
+                SELECT user_quiz_id
+                FROM user_quiz
+                WHERE user_id = :userId
+            )
+            AND difficulty IN (:difficulties)
+            ORDER BY RAND()
+            LIMIT 30
+            """, nativeQuery = true)
+    List<Question> findFreshQuestionsForUserAndDifficulties(Long userId, List<String> difficulties);
 }

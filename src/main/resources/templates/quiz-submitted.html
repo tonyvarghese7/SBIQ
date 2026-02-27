@@ -10,9 +10,17 @@
 
 <body>
     <img th:src="@{/images/logo.png}" alt="Salesbox AI" class="logo">
-    <div class="score-badge">
-        <span class="score-label">Score</span>
-        <span class="score-value" th:text="${score} + '/' + ${totalQuestions}"></span>
+    <div class="score-badge" style="padding: 8px 16px; top: 20px; right: 20px;">
+        <span class="score-label" style="font-size: 0.65rem; margin-bottom: 2px;">This Quiz</span>
+        <span class="score-value" th:text="${score} + '/' + ${totalQuestions}" style="font-size: 1.25rem;"></span>
+
+        <th:block th:if="${hasAttemptedBefore}">
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); width: 100%; margin: 6px 0;"></div>
+
+            <span class="score-label" style="font-size: 0.65rem; margin-bottom: 2px;">Prev Score</span>
+            <span class="score-value" th:text="${previousScore}"
+                style="font-size: 1.25rem; color: var(--accent-purple);"></span>
+        </th:block>
     </div>
     <div class="container container--quiz">
         <img th:src="@{/images/quiz-icon.png}" alt="Quiz Icon" class="quiz-icon">
@@ -52,9 +60,11 @@
 
         </div>
 
-        <div style="margin-top: 30px; display: flex; justify-content: center;">
-            <a href="/" class="btn" style="text-decoration: none; max-width: 250px; text-align: center;">Go Back to
-                Login</a>
+        <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+            <a href="/select-level" class="btn"
+                style="text-decoration: none; max-width: 250px; text-align: center;">Play Again</a>
+            <a href="/" class="btn"
+                style="text-decoration: none; max-width: 250px; text-align: center; background: transparent; border: 1px solid var(--border-color);">Logout</a>
         </div>
 
     </div>
