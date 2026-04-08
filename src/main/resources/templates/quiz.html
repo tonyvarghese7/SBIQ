@@ -11,6 +11,15 @@
 <body>
 
     <img th:src="@{/images/logo.png}" alt="Salesbox AI" class="logo">
+
+    <!-- Timer Badge -->
+    <div class="score-badge" th:if="${!allAttempted}"
+        style="position: fixed; z-index: 1000; padding: 8px 16px; top: 20px; right: 20px; text-align: center; display: flex; flex-direction: column;">
+        <span class="score-label" style="font-size: 0.65rem; margin-bottom: 2px;">Time Left</span>
+        <span class="score-value" id="timerDisplay"
+            style="font-size: 1.5rem; color: var(--primary-magenta);">20:00</span>
+    </div>
+
     <div class="container container--quiz">
         <img th:src="@{/images/quiz-icon.png}" alt="Quiz Icon" class="quiz-icon">
         <h2>Quiz Session</h2>
@@ -63,9 +72,37 @@
                 </div>
             </div>
 
+            <input type="hidden" name="autoSubmit" id="autoSubmit" value="false" />
             <button type="submit">Submit Quiz</button>
         </form>
     </div>
+
+    <!-- Timer Script -->
+    <script th:if="${!allAttempted}">
+        // 20 minutes in seconds
+        let timeLeft = 20 * 60;
+        const timerDisplay = document.getElementById('timerDisplay');
+        const form = document.querySelector('form');
+        const autoSubmitInput = document.getElementById('autoSubmit');
+
+        const updateTimer = () => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.innerText = "0:00";
+                autoSubmitInput.value = "true";
+                form.submit(); // Auto-submit when time is up
+            }
+            timeLeft--;
+        };
+
+        // Run once immediately, then set interval
+        updateTimer();
+        const timerInterval = setInterval(updateTimer, 1000);
+    </script>
 
 </body>
 

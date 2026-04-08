@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Quiz App</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <img th:src="@{/images/logo.png}" alt="Salesbox AI" class="logo">
+    <div class="container container--quiz">
+        <h2>Top 10 Leaderboard 🏆</h2>
+        <h3 style="margin-bottom: 20px;">The highest scores across all users</h3>
+
+        <div class="score-summary" style="padding: 0; overflow: hidden; background: rgba(0,0,0,0.2);">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background: rgba(255,255,255,0.05);">
+                        <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border-color);">Rank</th>
+                        <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border-color);">Email</th>
+                        <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border-color); text-align: right;">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user, stat : ${topUsers}" style="transition: background 0.3s; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 15px 20px;">
+                            <span th:if="${stat.index == 0}">🥇 </span>
+                            <span th:if="${stat.index == 1}">🥈 </span>
+                            <span th:if="${stat.index == 2}">🥉 </span>
+                            <strong th:text="${stat.index + 1}"></strong>
+                        </td>
+                        <td style="padding: 15px 20px;" th:text="${user.email}"></td>
+                        <td style="padding: 15px 20px; text-align: right; color: var(--primary-magenta); font-weight: bold; font-size: 1.1rem;" th:text="${user.score}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+            <a href="/select-level" class="btn" style="text-decoration: none; max-width: 250px; text-align: center;">Take a Quiz</a>
+            <a href="/" class="btn" style="text-decoration: none; max-width: 250px; text-align: center; background: transparent; border: 1px solid var(--border-color);">Logout</a>
+        </div>
+    </div>
+</body>
+
+</html>

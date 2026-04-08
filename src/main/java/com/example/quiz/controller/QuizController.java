@@ -112,14 +112,18 @@ public class QuizController {
         if (questions == null)
             return "redirect:/quiz";
 
-        // Validate all answers present
-        for (int i = 0; i < questions.size(); i++) {
-            String ans = allParams.get("answer" + (i + 1));
-            if (ans == null || ans.isBlank()) {
-                model.addAttribute("error", "Please answer all questions before submitting.");
-                model.addAttribute("questions", questions);
-                model.addAttribute("allAttempted", false);
-                return "quiz";
+        boolean isAutoSubmit = "true".equals(allParams.get("autoSubmit"));
+
+        // Validate all answers present ONLY if not auto-submitted
+        if (!isAutoSubmit) {
+            for (int i = 0; i < questions.size(); i++) {
+                String ans = allParams.get("answer" + (i + 1));
+                if (ans == null || ans.isBlank()) {
+                    model.addAttribute("error", "Please answer all questions before submitting.");
+                    model.addAttribute("questions", questions);
+                    model.addAttribute("allAttempted", false);
+                    return "quiz";
+                }
             }
         }
 
@@ -133,6 +137,9 @@ public class QuizController {
         for (int i = 0; i < questions.size(); i++) {
             Question q = questions.get(i);
             String ans = allParams.get("answer" + (i + 1));
+            if (ans == null || ans.isBlank()) {
+                ans = "Unanswered"; // default value for missing answers
+            }
 
             // 1. Save individual answer to UserQuiz table
             // userQuizId here is mapped to the Question ID as per user request
