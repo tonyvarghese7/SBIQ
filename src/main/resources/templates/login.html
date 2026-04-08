@@ -66,6 +66,11 @@
         // Optional: Hide on blur if valid? Or just keep for clarity. 
         // Let's keep it visible if user has started typing or focused.
 
+        // Disable initially
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+
         passwordInput.addEventListener('input', function () {
             const val = this.value;
             let allValid = true;
@@ -84,10 +89,15 @@
                 }
             }
 
-            // Optional: Disable button if invalid? 
-            // For better UX, might just let backend fail or show error nearby, 
-            // but strict client validation prevents bad requests.
-            // submitBtn.disabled = !allValid; // Valid approach
+            // Enforce client validation to prevent submitting if not fully matching
+            submitBtn.disabled = !allValid;
+            if(allValid){
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+            } else {
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+            }
         });
     </script>
 

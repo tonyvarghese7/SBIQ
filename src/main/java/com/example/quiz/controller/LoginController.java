@@ -22,6 +22,17 @@ public class LoginController {
     public String loginOrRegister(@RequestParam String email, @RequestParam String password, HttpSession session,
             org.springframework.ui.Model model) {
 
+        // Global password validation criteria
+        boolean hasLength = password.length() >= 8;
+        boolean hasUpper = password.matches(".*[A-Z].*");
+        boolean hasNumber = password.matches(".*[0-9].*");
+        boolean hasSpecial = password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
+
+        if (!hasLength || !hasUpper || !hasNumber || !hasSpecial) {
+            model.addAttribute("error", "Password must meet all complexity requirements.");
+            return "login";
+        }
+
         java.util.Optional<User> existingUser = userRepository.findByEmail(email);
 
         User user;

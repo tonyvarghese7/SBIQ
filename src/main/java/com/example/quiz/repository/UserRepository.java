@@ -7,4 +7,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
+    
+    // Fetch top 10 users ordered by score descending for the leaderboard
+    java.util.List<User> findTop10ByOrderByScoreDesc();
 }
